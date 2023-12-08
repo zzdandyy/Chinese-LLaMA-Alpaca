@@ -210,7 +210,8 @@ def merge_shards(output_dir, num_shards: int):
         shards_merged = {}
         for d in shards_dicts:
             shards_merged |= d
-
+        for fn in shards_filenames:
+            os.remove(os.path.join(output_dir,fn))
         print(f"Saving the merged shard to " + os.path.join(output_dir, f"consolidated.0{i}.pth"))
         torch.save(shards_merged, os.path.join(output_dir, f"consolidated.0{i}.pth"))
 
@@ -220,8 +221,6 @@ def merge_shards(output_dir, num_shards: int):
             del d
         del shards_dicts
         gc.collect()    # Effectively enforce garbage collection
-        for fn in shards_filenames:
-            os.remove(os.path.join(output_dir,fn))
 
 if __name__=='__main__':
 
